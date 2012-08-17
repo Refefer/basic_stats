@@ -1,0 +1,51 @@
+#!/usr/bin/awk -f
+
+BEGIN {
+    if(!field) {
+        field = 1;
+    } 
+    count = 0;
+}
+
+$field ~ /[0-9]+(\.[0-9]+)?/ {
+    sum += $field;
+    items[count] = $field;
+    count += 1;
+}
+
+function stdev(avg, N, items) {
+    var = 0;
+    for(i = 0; i < N; i++) {
+        var += (items[i] - avg)**2;
+    }
+    var = var / (N + 1);
+    return var ** .5;
+}
+
+function print_quartiles(N, items) {
+    print "Min:", items[1];
+    print "Q1:", items[int(N/4)];
+    print "Median:", items[int(N/2)];
+    print "Q3:", items[int(3*N/4)];
+    print "Max:", items[N];
+}
+
+END {
+    print "Count:", count;
+
+    average = sum/count;
+
+    # Get standard deviation
+    std = stdev(average, count, items);
+    printf "Variance: %.3f\n", var;
+    printf "Stdev: %.3f\n", std;
+
+    # Get Average and 95% CI
+    err = 1.96 * (std/(count**.5));
+    printf("Average: %.3f < %.3f < %.3f\n",average - err, average, average + err);
+
+    # Sort the array by increasing items
+    n = asort(items);
+
+    print_quartiles(count, items);
+}
