@@ -9,19 +9,23 @@ BEGIN {
     perfect_rx = "^"rx"$";
 }
 
-#$field ~ /[0-9]+(\.[0-9]+)?/ {
 $field ~ perfect_rx {
     sum += $field;
     items[count] = $field;
     count += 1;
-    pefect=1;
+    matched = 1;
 }
 
-$field !~ perfect_rx && $field ~ rx {
+!matched && $field ~ rx {
     match($field, rx, results);
     sum += results[1];
-    items[count] = $field;
+    items[count] = results[1];
+    print results[1];
     count += 1;
+}
+
+{
+    matched = 0;
 }
 
 function stdev(avg, N, items) {
