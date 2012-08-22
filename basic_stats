@@ -4,28 +4,30 @@ BEGIN {
     if(!field) {
         field = 1;
     } 
+    sum = 0;
     count = 0;
     rx = "([0-9]+(\\.[0-9]+)?)";
     perfect_rx = "^"rx"$";
 }
 
 $field ~ perfect_rx {
-    sum += $field;
-    items[count] = $field;
-    count += 1;
-    matched = 1;
+    add($field);
 }
 
 !matched && $field ~ rx {
     match($field, rx, results);
-    sum += results[1];
-    items[count] = results[1];
-    print results[1];
-    count += 1;
+    add(results[1]);
 }
 
 {
     matched = 0;
+}
+
+function add(field) {
+    sum += field;
+    items[count] = field;
+    count += 1;
+    matched=1;
 }
 
 function stdev(avg, N, items) {
