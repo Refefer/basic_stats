@@ -1,13 +1,23 @@
 #!/usr/bin/awk -f
 
 BEGIN {
-    if(!field) {
-        field = 1;
-    } 
+    orig_field = field;
+    if(!scalar) {
+        scalar = 1;
+    }
     sum = 0;
     count = 0;
     rx = "([0-9]+(\\.[0-9]+)?)";
     perfect_rx = "^"rx"$";
+}
+
+
+{
+    matched = 0;
+}
+
+!orig_field {
+    field = NF;
 }
 
 $field ~ perfect_rx {
@@ -15,15 +25,14 @@ $field ~ perfect_rx {
 }
 
 !matched && $field ~ rx {
+    print $NF, $(field);
     match($field, rx, results);
     add(results[1]);
 }
 
-{
-    matched = 0;
-}
 
 function add(field) {
+    field = field * scalar;
     sum += field;
     items[count] = field;
     count += 1;
