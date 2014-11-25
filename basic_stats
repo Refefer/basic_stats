@@ -54,6 +54,15 @@ function print_quartiles(N, items) {
     print "Max:", items[N];
 }
 
+function print_histogram(N, items) {
+    print "\nHistogram"
+    tenth = int(N / 10);
+    for(t = 1; t < 10; t++) {
+        printf("%s0%: %s\n", t, items[t*tenth]);
+    }
+    printf("99%: %s\n", items[int(N*0.99)]);
+}
+
 END {
     print "Count:", count;
     print "Sum:", sum;
@@ -73,4 +82,5 @@ END {
     n = asort(items);
 
     print_quartiles(count, items);
+    print_histogram(count, items);
 }
