@@ -67,11 +67,11 @@ function print_histogram(N, items) {
         printf("%s%: %s\n", (100*t * bucket) / N, items[t*bucket]);
     }
 
-    print "Nines"
+    print "\nNines"
     cur_nine = 0.0
     for(n=0; n < nines; n++) {
        cur_nine = (cur_nine / 10) + .9
-       printf("%s%: %s\n", 100*cur_nine, items[cur_nine * N]);
+       printf("%s%: %s\n", 100*cur_nine, items[int(cur_nine * N)]);
     }
 }
 
