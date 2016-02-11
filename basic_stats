@@ -5,6 +5,12 @@ BEGIN {
     if(!scalar) {
         scalar = 1;
     }
+    if(!buckets) {
+        buckets = 10;
+    }
+    if(!nines) {
+        nines = 2;
+    }
     sum = 0;
     count = 0;
     rx = "([0-9]+(\\.[0-9]+)?)";
@@ -56,11 +62,17 @@ function print_quartiles(N, items) {
 
 function print_histogram(N, items) {
     print "\nHistogram"
-    tenth = int(N / 10);
-    for(t = 1; t < 10; t++) {
-        printf("%s0%: %s\n", t, items[t*tenth]);
+    bucket = int(N / buckets);
+    for(t = 1; t < buckets; t++) {
+        printf("%s%: %s\n", (100*t * bucket) / N, items[t*bucket]);
     }
-    printf("99%: %s\n", items[int(N*0.99)]);
+
+    print "Nines"
+    cur_nine = 0.0
+    for(n=0; n < nines; n++) {
+       cur_nine = (cur_nine / 10) + .9
+       printf("%s%: %s\n", 100*cur_nine, items[cur_nine * N]);
+    }
 }
 
 END {
