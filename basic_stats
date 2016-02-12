@@ -62,9 +62,9 @@ function print_quartiles(N, items) {
 
 function print_histogram(N, items) {
     print "\nHistogram"
-    bucket = int(N / buckets);
+    bucket = N / buckets
     for(t = 1; t < buckets; t++) {
-        printf("%s%: %s\n", (100*t * bucket) / N, items[t*bucket]);
+        printf("%s%: %s\n", (100 * t * bucket) / N, items[int(t*bucket)]);
     }
 
     print "\nNines"
